@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Englebert&family=Knewave&family=Pacifico&display=swap');
+
+:root {
+  color-scheme: dark;
+  font-size: 16px;
+  /* New blue/white color palette */
+  --bg-dark: #0f172a;
+  --bg-light: #1e293b;
+  --card: #1e293b;
+  --accent: #60a5fa; /* Brighter blue for primary accents */
+  --accent-soft: #3b82f6; /* Softer blue */
+  --accent-glow: #93c5fd; /* Electric blue for glows */
+  --text-primary: #ffffff;
+  --text-muted: #cbd5e1;
+  --separator: rgba(255, 255, 255, 0.15);
+  --shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 10px 25px rgba(96, 165, 250, 0.2);
+  --gradient-button: linear-gradient(145deg, #ffffff, #dbeafe);
+  --gradient-button-hover: linear-gradient(145deg, #ffffff, #eef6ff);
+
+  /* Indicator colors */
+  --low-force: #22c55e;
+  --mid-force: #facc15;
+  --high-force: #ef4444;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.knewave-regular {
+  font-family: "Knewave", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.englebert-regular {
+  font-family: "Englebert", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+  font-family: "Englebert", cursive;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 430px;
+  background: radial-gradient(circle at top, #29364f, #111827 70%);
+  border-radius: 1.5rem;
+  padding: 1.75rem 1.5rem 2.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  box-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 255, 255, 0.7);
+  border-radius: 1.5rem 1.5rem 0 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.app-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.status-bar {
+  width: 64px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  margin: 0 auto 1.25rem;
+}
+
+/* Centered Header */
+.app-header {
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  font-family: 'Pacifico', 'Segoe Script', cursive;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+.subtitle {
+  margin: 0.75rem 0 1.5rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  font-size: 0.98rem;
+}
+
+.separator {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+h2 {
+  font-family: "Englebert", cursive;
+}
+.section-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  position: relative;
+  animation: text-glow-white 3s ease-in-out infinite;
+}
+
+@keyframes text-glow-white {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 0 0 12px rgba(255, 255, 255, 0.2);
+  }
+}
+
+#toggle-sim {
+  background: var(--gradient-button);
+  color: #0a0f1b;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  padding: 0.45rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
+}
+
+#toggle-sim:hover,
+#toggle-sim:focus {
+  background: var(--gradient-button-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(96, 165, 250, 0.3), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
+  outline: none;
+}
+
+#toggle-sim:active {
+  transform: translateY(1px);
+}
+
+#toggle-sim.is-active {
+  background: var(--gradient-button-hover);
+  color: #0a0f1b;
+  box-shadow: 0 2px 10px rgba(96, 165, 250, 0.4), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
+  transform: translateY(1px);
+}
+
+.shoe-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 300 / 160;
+  border-radius: 1.25rem;
+  background: linear-gradient(145deg, #283347, #111827);
+  box-shadow: inset 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shoe-3d-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.shoe-3d-container model-viewer {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  --poster-color: transparent;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+.color-dot.low {
+  background: var(--low-force);
+}
+
+.color-dot.mid {
+  background: var(--mid-force);
+}
+
+.color-dot.high {
+  background: var(--high-force);
+  box-shadow: 0 0 6px var(--high-force), 0 0 10px var(--high-force);
+}
+
+.collapsible-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(40, 51, 71, 0.7);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  text-align: left;
+  outline: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  width: 100%;
+  margin: 0 0 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1) inset;
+}
+
+.collapsible-title:hover {
+  color: #fff;
+  background-color: rgba(96, 165, 250, 0.15);
+  border-color: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.collapsible-title .arrow {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+  margin-left: 0.75rem;
+  opacity: 0.7;
+}
+
+.collapsible-title.active .arrow {
+  transform: rotate(45deg);
+}
+
+.collapsible-content {
+  color: var(--text-muted);
+  line-height: 1.6;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.collapsible-content.active {
+  opacity: 1;
+  max-height: 500px;
+  transform: translateY(0);
+}
+
+.how-it-works p.note {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  opacity: 0.85;
+  margin-top: 0.5rem;
+}
+
+.code-block {
+  background: rgba(10, 15, 27, 0.9);
+  border-radius: 1rem;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  padding: 1rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  overflow: auto;
+}
+
+.code-block pre {
+  margin: 0;
+  font-family: 'Fira Code', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #d8e7ff;
+}
+
+.arduino-code-hidden {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 2rem 1rem;
+  }
+
+  .app-shell {
+    padding: 1.5rem 1.25rem 2rem;
+    border-radius: 1.25rem;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+}
+
+/* Heatmap styles */
+.heatmap-point {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    animation: heatmap-fade 1.5s forwards;
+    background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(96, 165, 250, 0.6) 30%,
+        rgba(59, 130, 246, 0.3) 60%,
+        rgba(30, 64, 175, 0) 100%
+    );
+}
+
+@keyframes heatmap-fade {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}

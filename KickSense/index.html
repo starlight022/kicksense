@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KickSense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Model Viewer for 3D model rendering -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="status-bar"></div>
+      <h1>KickSense</h1>
+      <p class="subtitle">
+        En smart fotballsokk som registrerer hvor på foten ballen treffer. Data brukes til å forbedre skuddteknikk og trening.
+      </p>
+      <div class="separator"></div>
+    </header>
+
+    <section class="visualizer" aria-labelledby="visualizer-title">
+      <div class="section-header">
+        <h2 id="visualizer-title">Treffsoner i sanntid</h2>
+        <button id="toggle-sim" type="button">Simuler treff</button>
+      </div>
+      <div class="shoe-wrapper">
+        <!-- 3D model container -->
+        <div id="shoe-3d-container" class="shoe-3d-container">
+          <model-viewer 
+            src="unused_blue_vans_shoe.glb" 
+            alt="3D-modell av fotballsko"
+            auto-rotate
+            camera-controls
+            ar
+            loading="lazy"
+            style="width: 100%; height: 100%;">
+          </model-viewer>
+        </div>
+      </div>
+      <ul class="legend">
+        <li><span class="color-dot low"></span>Lav kraft</li>
+        <li><span class="color-dot mid"></span>Middels kraft</li>
+        <li><span class="color-dot high"></span>Høy kraft</li>
+      </ul>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="how-title">
+      <button class="collapsible-title" id="how-title">Hvordan det fungerer <span class="arrow"></span></button>
+      <div class="collapsible-content">
+        <p>FSR-sensorer (Force Sensitive Resistors) endrer motstand etter hvor hardt de presses. Når sokken registrerer et treff, synker motstanden og gir oss et mål på kraften.</p>
+        <p>En Arduino leser spenningen fra hver sensor. Ved å måle motstanden kan vi beregne kraften i gram. Denne nettsiden bruker sanntidsdata eller simulerte verdier for å demonstrere hvor på foten ballen treffer.</p>
+        <p class="note">Arduino-en kjører separat, og nettsiden vil senere koble til dens seriellutgang for å lese dataene direkte.</p>
+      </div>
+      <!-- Arduino code hidden - reserved for future serial data collection implementation -->
+    </section>
+    <section class="why-it-matters" aria-labelledby="why-title">
+      <button class="collapsible-title" id="why-title">Hvorfor dette er nyttig <span class="arrow"></span></button>
+      <div class="collapsible-content">
+        <p>Dette systemet gjør det mulig å forstå <i>hvordan</i> og <i>hvor hardt</i> man treffer ballen. Mange fotballspillere vet hvor de ønsker å treffe, men det er vanskelig å føle det nøyaktig under fart.</p>
+        <p>Med sensorer i sokken får du:</p>
+        <ul>
+          <li>Klar oversikt over treffpunktet på foten</li>
+          <li>Måling av kraften bak hvert spark</li>
+          <li>Bedre teknikkforståelse</li>
+          <li>Rask tilbakemelding som hjelper deg å justere teknikken</li>
+          <li>Mer målrettet trening</li>
+          <li>Mulighet til å analysere utvikling over tid</li>
+        </ul>
+        <p>Kort sagt: Dette er et verktøy for alle som vil trene smartere og forstå egen skuddteknikk bedre.</p>
+      </div>
+    </section>
+      <div class="code-block arduino-code-hidden" role="region" aria-label="Arduino-kode" data-arduino-reference="true">
+      <button class="collapsible-title" id="how-title">Hvordan det fungerer</button>
+      <div class="collapsible-content">
+        <p>FSR-sensorer (Force Sensitive Resistors) endrer motstand etter hvor hardt de presses. Når sokken registrerer et treff, synker motstanden og gir oss et mål på kraften.</p>
+        <p>En Arduino leser spenningen fra hver sensor. Ved å måle motstanden kan vi beregne kraften i gram. Denne nettsiden bruker sanntidsdata eller simulerte verdier for å demonstrere hvor på foten ballen treffer.</p>
+        <p class="note">Arduino-en kjører separat, og nettsiden vil senere koble til dens seriellutgang for å lese dataene direkte.</p>
+      </div>
+<pre><code>const int FSR_PIN1 = A0;
+const int FSR_PIN2 = A1;
+const int FSR_PIN3 = A2;
+
+const float VCC = 4.98;
+const float R_DIV = 3230.0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(FSR_PIN1, INPUT);
+  pinMode(FSR_PIN2, INPUT);
+  pinMode(FSR_PIN3, INPUT);
+}
+
+void loop() {
+  loop1();
+  loop2();
+  loop3();
+}
+
+void loop1() {
+  int fsrADC1 = analogRead(FSR_PIN1);
+  if (fsrADC1 != 0) {
+    float fsrV = fsrADC1 * VCC / 1023.0;
+    float fsrR = R_DIV * (VCC / fsrV - 1.0);
+    Serial.println("Resistance1: " + String(fsrR) + " ohms");
+    float force;
+    float fsrG = 1.0 / fsrR;
+    if (fsrR <= 600)
+      force = (fsrG - 0.00075) / 0.00000032639;
+    else
+      force = fsrG / 0.000000642857;
+    Serial.println("Force1: " + String(force) + " g");
+    Serial.println();
+    delay(500);
+  }
+}
+
+void loop2() {
+  int fsrADC2 = analogRead(FSR_PIN2);
+  if (fsrADC2 != 0) {
+    float fsrV2 = fsrADC2 * VCC / 1023.0;
+    float fsrR2 = R_DIV * (VCC / fsrV2 - 1.0);
+    Serial.println("Resistance2: " + String(fsrR2) + " ohms");
+    float force2;
+    float fsrG2 = 1.0 / fsrR2;
+    if (fsrR2 <= 600)
+      force2 = (fsrG2 - 0.00075) / 0.00000032639;
+    else
+      force2 = fsrG2 / 0.000000642857;
+    Serial.println("Force2: " + String(force2) + " g");
+    Serial.println();
+    delay(500);
+  }
+}
+
+void loop3() {
+  int fsrADC3 = analogRead(FSR_PIN3);
+  if (fsrADC3 != 0) {
+    float fsrV3 = fsrADC3 * VCC / 1023.0;
+    float fsrR3 = R_DIV * (VCC / fsrV3 - 1.0);
+    Serial.println("Resistance3: " + String(fsrR3) + " ohms");
+    float force3;
+    float fsrG3 = 1.0 / fsrR3;
+    if (fsrR3 <= 600)
+      force3 = (fsrG3 - 0.00075) / 0.00000032639;
+    else
+      force3 = fsrG3 / 0.000000642857;
+    Serial.println("Force3: " + String(force3) + " g");
+    Serial.println();
+    delay(500);
+  }
+}</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
+
