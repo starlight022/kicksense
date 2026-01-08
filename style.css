@@ -1,0 +1,683 @@
+/* ==========================================================
+   0) IMPORTS (Fonts)
+   - You use these in headers and the overall UI look
+   ========================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Englebert&family=Knewave&family=Pacifico&display=swap');
+
+
+/* ==========================================================
+   1) THEME / DESIGN TOKENS (CSS Variables)
+   - This is your “palette + spacing system”
+   - If you want to change the whole design later, start here
+   ========================================================== */
+:root {
+  color-scheme: dark;
+  font-size: 16px;
+
+  /* Base backgrounds */
+  --bg-dark: #0f172a;
+  --bg-light: #1e293b;
+
+  /* Surfaces */
+  --card: #1e293b;
+
+  /* Accent system (blue-based) */
+  --accent: #60a5fa;       /* primary action blue */
+  --accent-soft: #3b82f6;  /* softer blue */
+  --accent-glow: #93c5fd;  /* glow blue */
+
+  /* Typography */
+  --text-primary: #ffffff;
+  --text-muted: #cbd5e1;
+
+  /* Lines / shadows */
+  --separator: rgba(255, 255, 255, 0.15);
+  --shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 10px 25px rgba(96, 165, 250, 0.2);
+
+  /* Buttons */
+  --gradient-button: linear-gradient(145deg, #ffffff, #dbeafe);
+  --gradient-button-hover: linear-gradient(145deg, #ffffff, #eef6ff);
+
+  /* Indicator colors (legend) */
+  --low-force: #22c55e;
+  --mid-force: #facc15;
+  --high-force: #ef4444;
+}
+
+
+/* ==========================================================
+   2) GLOBAL RESET / BASE RULES
+   - Makes sizing predictable everywhere
+   ========================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   3) FONT UTILITY CLASSES
+   - Optional helpers if you apply these classes in HTML
+   ========================================================== */
+.knewave-regular {
+  font-family: "Knewave", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.englebert-regular {
+  font-family: "Englebert", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* ==========================================================
+   4) PAGE LAYOUT (Body + App Container)
+   - Centers the “phone-like” app shell
+   ========================================================== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+  font-family: "Englebert", cursive;
+  color: var(--text-primary);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3rem 1rem;
+}
+
+/* Main card / “phone shell” */
+.app-shell {
+  width: 100%;
+  max-width: 430px;
+  background: radial-gradient(circle at top, #29364f, #111827 70%);
+  border-radius: 1.5rem;
+  padding: 1.75rem 1.5rem 2.5rem;
+  box-shadow: var(--shadow);
+
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Top highlight line */
+.app-shell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  box-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 255, 255, 0.7);
+
+  border-radius: 1.5rem 1.5rem 0 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* Inner border line */
+.app-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Little “phone handle” */
+.status-bar {
+  width: 64px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  margin: 0 auto 1.25rem;
+}
+
+
+/* ==========================================================
+   5) HEADER (KickSense title + subtitle)
+   ========================================================== */
+.app-header {
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+
+  font-family: 'Pacifico', 'Segoe Script', cursive;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+.subtitle {
+  margin: 0.75rem 0 1.5rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  font-size: 0.98rem;
+}
+
+.separator {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+
+/* ==========================================================
+   6) VISUALIZER LAYOUT (title + buttons + content)
+   ========================================================== */
+.visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem; /* spacing between Generator and Sim buttons */
+}
+
+/* Heading font choice */
+h2 {
+  font-family: "Englebert", cursive;
+}
+
+/* Visualizer title: animated glow */
+.section-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  position: relative;
+  animation: text-glow-white 3s ease-in-out infinite;
+}
+
+@keyframes text-glow-white {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 0 0 12px rgba(255, 255, 255, 0.2);
+  }
+}
+
+
+/* ==========================================================
+   7) CONTROL BUTTONS (Generator / Simuler treff)
+   - JS toggles .is-active on these
+   ========================================================== */
+#toggle-sim, #toggle-generator {
+  background: var(--gradient-button);
+  color: #0a0f1b;
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+
+  padding: 0.45rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
+}
+
+#toggle-sim:hover, #toggle-generator:hover,
+#toggle-sim:focus, #toggle-generator:focus {
+  background: var(--gradient-button-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(96, 165, 250, 0.3), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
+  outline: none;
+}
+
+#toggle-sim:active, #toggle-generator:active {
+  transform: translateY(1px);
+}
+
+#toggle-sim.is-active, #toggle-generator.is-active {
+  background: var(--gradient-button-hover);
+  color: #0a0f1b;
+  box-shadow: 0 2px 10px rgba(96, 165, 250, 0.4), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
+  transform: translateY(1px);
+}
+
+
+/* ==========================================================
+   8) SENSOR READOUT BAR (toeN / insideN / lacesN)
+   - Highlighted max value gets .highlight
+   ========================================================== */
+.sensor-display {
+  display: flex;
+  justify-content: space-around;
+
+  padding: 0.75rem 0.5rem;
+  background-color: rgba(40, 51, 71, 0.7);
+
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow: inset 0 0 10px rgba(96, 165, 250, 0.1);
+
+  font-family: 'Fira Code', 'SFMono-Regular', monospace;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  color: var(--accent-glow);
+  letter-spacing: 0.03em;
+
+  margin-top: 1rem;     /* space below the buttons */
+  margin-bottom: 0.5rem; /* space above the shoe */
+}
+
+.sensor-value {
+  transition: color 0.1s ease;
+}
+
+.sensor-value.highlight {
+  color: var(--text-primary);
+  text-shadow: 0 0 5px var(--accent-glow);
+}
+
+
+/* ==========================================================
+   9) VIEW SELECTOR (1 / 2 / 3 buttons)
+   - Active gets .is-active
+   ========================================================== */
+.view-selector-panel {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.view-selector-btn {
+  width: 3rem;
+  height: 3rem;
+
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-selector-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.view-selector-btn.is-active {
+  background: var(--accent);
+  color: var(--bg-dark); /* dark text on blue */
+  border-color: var(--accent-glow);
+  transform: scale(1.15);
+  box-shadow: 
+  0 0 10px var(--accent-soft), 
+  0 0 20px var(--accent-glow);
+  transform: scale(1.05);
+}
+
+
+/* ==========================================================
+   10) SHOWCASE VIEW SWITCHING (View 1 / 2 / 3 panels)
+   - wrapper holds the stack
+   - inactive views are absolute + transparent
+   - active view becomes relative to take space
+   ========================================================== */
+#showcase-views-wrapper {
+  position: relative;
+  /* note: you rely on views being similar height so the wrapper feels stable */
+}
+
+.showcase-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  opacity: 0;
+
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.showcase-view.is-active {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* ==========================================================
+   11) SHOE DISPLAY AREA (3D model container)
+   - aspect-ratio makes the shoe view consistent
+   ========================================================== */
+.shoe-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 300 / 160;
+
+  border-radius: 1.25rem;
+  background: linear-gradient(145deg, #283347, #111827);
+
+  box-shadow: inset 0 12px 30px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.1);
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shoe-3d-container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+}
+
+/* model-viewer canvas */
+.shoe-3d-container model-viewer {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  --poster-color: transparent;
+}
+
+
+/* ==========================================================
+   12) LEGEND (Low / Mid / High force indicators)
+   ========================================================== */
+.legend {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0;
+  margin: 0;
+
+  list-style: none;
+
+  color: var(--text-muted);
+  font-size: 0.85rem;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.color-dot {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+  display: inline-block;
+
+  margin-right: 0.5rem;
+  vertical-align: middle;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+.color-dot.low { background: var(--low-force); }
+.color-dot.mid { background: var(--mid-force); }
+
+.color-dot.high {
+  background: var(--high-force);
+  box-shadow: 0 0 6px var(--high-force), 0 0 10px var(--high-force);
+}
+
+
+/* ==========================================================
+   13) COLLAPSIBLE SECTIONS (Hvordan / Hvorfor)
+   - JS toggles .active on title + arrow rotation
+   ========================================================== */
+.collapsible-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: rgba(40, 51, 71, 0.7);
+  color: var(--text-primary);
+
+  cursor: pointer;
+
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+
+  text-align: left;
+  outline: none;
+
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  width: 100%;
+  margin: 0 0 1rem;
+
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1) inset;
+}
+
+.collapsible-title:hover {
+  color: #fff;
+  background-color: rgba(96, 165, 250, 0.15);
+  border-color: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+/* The arrow icon (rotates when open) */
+.collapsible-title .arrow {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+
+  margin-left: 0.75rem;
+  opacity: 0.7;
+}
+
+.collapsible-title.active .arrow {
+  transform: rotate(45deg);
+}
+
+/* The collapsible panel itself */
+.collapsible-content {
+  color: var(--text-muted);
+  line-height: 1.6;
+
+  overflow: hidden;
+  max-height: 0;
+
+  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.collapsible-content.active {
+  opacity: 1;
+  max-height: 500px;
+  transform: translateY(0);
+}
+
+/* Small “note” paragraph style */
+.how-it-works p.note {
+  font-family: "Times New Roman", serif;
+  font-size: 0.9rem;
+  font-style: normal;
+  color: var(--text-muted);
+  opacity: 0.85;
+  margin-top: 0.5rem;
+}
+
+
+/* ==========================================================
+   14) CODE BLOCK (Arduino block styling)
+   - .arduino-code-hidden hides it fully
+   ========================================================== */
+.code-block {
+  background: rgba(10, 15, 27, 0.9);
+
+  border-radius: 1rem;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+
+  padding: 1rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+
+  overflow: auto;
+}
+
+.code-block pre {
+  margin: 0;
+  font-family: 'Fira Code', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #d8e7ff;
+}
+
+.arduino-code-hidden {
+  display: none !important;
+}
+
+
+/* ==========================================================
+   15) RESPONSIVE (phones)
+   - Only adjusts padding + legend layout
+   ========================================================== */
+@media (max-width: 480px) {
+  body {
+    padding: 2rem 1rem;
+  }
+
+  .app-shell {
+    padding: 1.5rem 1.25rem 2rem;
+    border-radius: 1.25rem;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+}
+
+
+/* ==========================================================
+   16) HEATMAP POINT EFFECT
+   ========================================================== */
+.heatmap-point {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10;
+
+  transform: translate(-50%, -50%);
+  animation: heatmap-fade 1.5s forwards;
+
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(96, 165, 250, 0.6) 30%,
+    rgba(59, 130, 246, 0.3) 60%,
+    rgba(30, 64, 175, 0) 100%
+  );
+}
+
+@keyframes heatmap-fade {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+/* ==========================================================
+   17) 3D VIEW OVERLAY DOTS (impact circles)
+   ========================================================== */
+.shoe-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.impact-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0;
+  border: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 0 0 10px rgba(255,255,255,0.20);
+  transition: opacity 120ms ease, transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.impact-dot.is-on {
+  opacity: 1;
+}
+
+/* Underskrift under the dots*/
+.impact-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 0 6px rgba(0,0,0,0.8);
+  white-space: nowrap;
+}
+

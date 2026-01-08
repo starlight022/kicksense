@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <!-- =======================================================
+       1) META + PAGE IDENTITY
+       ======================================================= -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KickSense</title>
+
+  <!-- =======================================================
+       2) FONTS + STYLES
+       ======================================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- =======================================================
+       3) 3D RENDERING LIBRARY (Model Viewer)
+       - Used for <model-viewer> elements in the showcase views
+       ======================================================= -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+
+<body>
+  <!-- =======================================================
+       MAIN APP SHELL (everything inside your app layout)
+       ======================================================= -->
+  <main class="app-shell">
+
+    <!-- =======================================================
+         HEADER / INTRO
+         - branding
+         - short product explanation
+         ======================================================= -->
+    <header class="app-header">
+      <div class="status-bar"></div>
+
+      <h1>KickSense</h1>
+
+      <p class="subtitle">
+        En smart fotballsokk som registrerer hvor på foten ballen treffer. Data brukes til å forbedre skuddteknikk og trening.
+      </p>
+
+      <div class="separator"></div>
+    </header>
+
+    <!-- =======================================================
+         VISUALIZER SECTION
+         - buttons: Generator / Simuler treff
+         - view selector: 1 / 2 / 3
+         - 3D showcase views
+         ======================================================= -->
+    <section class="visualizer" aria-labelledby="visualizer-title">
+
+      <!-- Section title + controls -->
+      <div class="section-header">
+        <h2 id="visualizer-title">Treffsoner i sanntid</h2>
+
+        <!-- Buttons used by script.js:
+             - #toggle-generator
+             - #toggle-sim
+        -->
+        <div class="control-group">
+          <button id="toggle-generator" type="button">Generator</button>
+          <button id="toggle-sim" type="button">Simuler treff</button>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           VIEW SELECTOR PANEL
+           - used to switch between 3 showcases
+           - JS can toggle "is-active" on:
+             .view-selector-btn and .showcase-view
+           ===================================================== -->
+      <div class="view-selector-panel">
+        <button class="view-selector-btn is-active" data-view="1" aria-label="Vis vinkel 1">1</button>
+        <button class="view-selector-btn" data-view="2" aria-label="Vis vinkel 2">2</button>
+        <button class="view-selector-btn" data-view="3" aria-label="Vis vinkel 3">3</button>
+      </div>
+
+      <!-- =====================================================
+           SHOWCASE WRAPPER
+           Contains:
+           - View 1
+           - View 2
+           - View 3
+           ===================================================== -->
+      <div id="showcase-views-wrapper">
+
+        <!-- ===================================================
+             VIEW 1
+             =================================================== -->
+        <div id="showcase-1" class="showcase-view is-active">
+
+          <!-- Sensor readout (view 1) -->
+          <div id="sensor-display" class="sensor-display">
+            <span class="sensor-value" id="toeN-display">toeN: 0.00</span>
+            <span class="sensor-value" id="insideN-display">insideN: 0.00</span>
+            <span class="sensor-value" id="lacesN-display">lacesN: 0.00</span>
+          </div>
+
+          <!-- 3D shoe container -->
+          <div class="shoe-wrapper">
+            <div id="shoe-3d-container-1" class="shoe-3d-container">
+              <model-viewer
+                src="unused_blue_vans_shoe.glb"
+                alt="3D-modell av fotballsko - Vinkel 1"
+                camera-orbit="10deg 90deg 1.5m"
+                ar
+                loading="lazy"
+                id="model-viewer-1"
+                style="width: 100%; height: 100%;">
+              </model-viewer>
+
+              <div class="shoe-overlay" id="shoe-overlay-1"></div>
+            </div>
+          </div>
+
+          <!-- Legend (color meaning) -->
+          <ul class="legend">
+            <li><span class="color-dot low"></span>Lav kraft</li>
+            <li><span class="color-dot mid"></span>Middels kraft</li>
+            <li><span class="color-dot high"></span>Høy kraft</li>
+          </ul>
+        </div>
+
+        <!-- ===================================================
+             VIEW 2
+             =================================================== -->
+        <div id="showcase-2" class="showcase-view">
+
+          <!-- Sensor readout (view 2) -->
+          <div class="sensor-display">
+            <span class="sensor-value" id="toeN-display-2">toeN: 0.00</span>
+            <span class="sensor-value" id="insideN-display-2">insideN: 0.00</span>
+            <span class="sensor-value" id="lacesN-display-2">lacesN: 0.00</span>
+          </div>
+
+          <!-- 3D shoe container -->
+          <div class="shoe-wrapper">
+            <div id="shoe-3d-container-2" class="shoe-3d-container">
+              <model-viewer
+                src="unused_blue_vans_shoe.glb"
+                alt="3D-modell av fotballsko - Vinkel 2 (Tå fokus)"
+                camera-orbit="190deg 90deg 1.5m"
+                ar
+                loading="lazy"
+                id="model-viewer-2"
+                style="width: 100%; height: 100%;">
+              </model-viewer>
+
+              <div class="shoe-overlay" id="shoe-overlay-2"></div>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <ul class="legend">
+            <li><span class="color-dot low"></span>Lav kraft</li>
+            <li><span class="color-dot mid"></span>Middels kraft</li>
+            <li><span class="color-dot high"></span>Høy kraft</li>
+          </ul>
+        </div>
+
+        <!-- ===================================================
+             VIEW 3
+             =================================================== -->
+        <div id="showcase-3" class="showcase-view">
+
+          <!-- Sensor readout (view 3) -->
+          <div class="sensor-display">  
+            <span class="sensor-value" id="toeN-display-3">toeN: 0.00</span>
+            <span class="sensor-value" id="insideN-display-3">insideN: 0.00</span>
+            <span class="sensor-value" id="lacesN-display-3">lacesN: 0.00</span>
+          </div>
+
+          <!-- 3D shoe container -->
+          <div class="shoe-wrapper">
+            <div id="shoe-3d-container-3" class="shoe-3d-container">
+
+              <model-viewer
+                src="unused_blue_vans_shoe.glb"
+                alt="3D-modell av fotballsko - Vinkel 3 (Innside fokus)"
+                camera-orbit="300deg 75deg 1.5m"
+                ar
+                loading="lazy"
+                id="model-viewer-3"
+                style="width: 100%; height: 100%;">
+              </model-viewer>
+              
+              <div class="shoe-overlay" id="shoe-overlay-3"></div>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <ul class="legend">
+            <li><span class="color-dot low"></span>Lav kraft</li>
+            <li><span class="color-dot mid"></span>Middels kraft</li>
+            <li><span class="color-dot high"></span>Høy kraft</li>
+          </ul>
+        </div>
+
+      </div> <!-- /#showcase-views-wrapper -->
+    </section>
+
+    <!-- =======================================================
+         EXPLANATION SECTIONS
+         ======================================================= -->
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works" aria-labelledby="how-title">
+      <button class="collapsible-title" id="how-title">
+        Hvordan det fungerer <span class="arrow"></span>
+      </button>
+
+      <div class="collapsible-content">
+        <p>FSR-sensorer (Force Sensitive Resistors) endrer motstand etter hvor hardt de presses. Når sokken registrerer et treff, synker motstanden og gir oss et mål på kraften.</p>
+        <p>En Arduino leser spenningen fra hver sensor. Ved å måle motstanden kan vi beregne kraften i gram. Denne nettsiden bruker sanntidsdata eller simulerte verdier for å demonstrere hvor på foten ballen treffer.</p>
+        <p class="note">Arduino-en kjører separat, og nettsiden vil senere koble til dens seriellutgang for å lese dataene direkte.</p>
+      </div>
+    </section>
+
+    <!-- WHY IT MATTERS -->
+    <section class="why-it-matters" aria-labelledby="why-title">
+      <button class="collapsible-title" id="why-title">
+        Hvorfor dette er nyttig <span class="arrow"></span>
+      </button>
+
+      <div class="collapsible-content">
+        <p>Dette systemet gjør det mulig å forstå <i>hvordan</i> og <i>hvor hardt</i> man treffer ballen. Mange fotballspillere vet hvor de ønsker å treffe, men det er vanskelig å føle det nøyaktig under fart.</p>
+        <p>Med sensorer i sokken får du:</p>
+
+        <ul>
+          <li>Klar oversikt over treffpunktet på foten</li>
+          <li>Måling av kraften bak hvert spark</li>
+          <li>Bedre teknikkforståelse</li>
+          <li>Rask tilbakemelding som hjelper deg å justere teknikken</li>
+          <li>Mer målrettet trening</li>
+          <li>Mulighet til å analysere utvikling over tid</li>
+        </ul>
+
+        <p>Kort sagt: Dette er et verktøy for alle som vil trene smartere og forstå egen skuddteknikk bedre.</p>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         HIDDEN / EXTRA ARDUINO CODE BLOCK SECTION
+         ======================================================= -->
+
+    <div class="code-block arduino-code-hidden" role="region" aria-label="Arduino-kode" data-arduino-reference="true">
+      <button class="collapsible-title" id="how-title">Hvordan det fungerer</button>
+      <div class="collapsible-content">
+        <p>FSR-sensorer (Force Sensitive Resistors) endrer motstand etter hvor hardt de presses. Når sokken registrerer et treff, synker motstanden og gir oss et mål på kraften.</p>
+        <p>En Arduino leser spenningen fra hver sensor. Ved å måle motstanden kan vi beregne kraften i gram. Denne nettsiden bruker sanntidsdata eller simulerte verdier for å demonstrere hvor på foten ballen treffer.</p>
+        <p class="note">Arduino-en kjører separat, og nettsiden vil senere koble til dens seriellutgang for å lese dataene direkte.</p>
+      </div>
+
+      <pre><code>
+</code></pre>
+    </div>
+
+    </section>
+  </main>
+
+  <!-- =======================================================
+       MAIN SCRIPT (your logic)
+       - type="module" means import/export is allowed
+       ======================================================= -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
