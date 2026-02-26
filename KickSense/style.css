@@ -1,35 +1,66 @@
+/* ==========================================================
+   0) IMPORTS (Fonts)
+   - You use these in headers and the overall UI look
+   ========================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Englebert&family=Knewave&family=Pacifico&display=swap');
 
+
+/* ==========================================================
+   1) THEME / DESIGN TOKENS (CSS Variables)
+   - This is your “palette + spacing system”
+   - If you want to change the whole design later, start here
+   ========================================================== */
 :root {
   color-scheme: dark;
   font-size: 16px;
-  /* New blue/white color palette */
+
+  /* Base backgrounds */
   --bg-dark: #0f172a;
   --bg-light: #1e293b;
+
+  /* Surfaces */
   --card: #1e293b;
-  --accent: #60a5fa; /* Brighter blue for primary accents */
-  --accent-soft: #3b82f6; /* Softer blue */
-  --accent-glow: #93c5fd; /* Electric blue for glows */
+
+  /* Accent system (blue-based) */
+  --accent: #60a5fa;       /* primary action blue */
+  --accent-soft: #3b82f6;  /* softer blue */
+  --accent-glow: #93c5fd;  /* glow blue */
+
+  /* Typography */
   --text-primary: #ffffff;
   --text-muted: #cbd5e1;
+
+  /* Lines / shadows */
   --separator: rgba(255, 255, 255, 0.15);
   --shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
   --shadow-soft: 0 10px 25px rgba(96, 165, 250, 0.2);
+
+  /* Buttons */
   --gradient-button: linear-gradient(145deg, #ffffff, #dbeafe);
   --gradient-button-hover: linear-gradient(145deg, #ffffff, #eef6ff);
 
-  /* Indicator colors */
+  /* Indicator colors (legend) */
   --low-force: #22c55e;
   --mid-force: #facc15;
   --high-force: #ef4444;
 }
 
+
+/* ==========================================================
+   2) GLOBAL RESET / BASE RULES
+   - Makes sizing predictable everywhere
+   ========================================================== */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+
+/* ==========================================================
+   3) FONT UTILITY CLASSES
+   - Optional helpers if you apply these classes in HTML
+   ========================================================== */
 .knewave-regular {
   font-family: "Knewave", system-ui;
   font-weight: 400;
@@ -42,47 +73,61 @@
   font-style: normal;
 }
 
+
+/* ==========================================================
+   4) PAGE LAYOUT (Body + App Container)
+   - Centers the “phone-like” app shell
+   ========================================================== */
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+  background: var(--bg);
   font-family: "Englebert", cursive;
-  color: var(--text-primary);
+  color: var(--text);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 3rem 1rem;
 }
 
+/* Main card / “phone shell” */
 .app-shell {
   width: 100%;
   max-width: 430px;
-  background: radial-gradient(circle at top, #29364f, #111827 70%);
+  background: radial-gradient(180deg, var(--panel), var(--panel2));
   border-radius: 1.5rem;
   padding: 1.75rem 1.5rem 2.5rem;
   box-shadow: var(--shadow);
+
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Top highlight line */
 .app-shell::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
+
   height: 1px;
   background: linear-gradient(90deg, transparent, #ffffff, transparent);
   box-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 255, 255, 0.7);
+
   border-radius: 1.5rem 1.5rem 0 0;
   pointer-events: none;
   z-index: 1;
   opacity: 0.6;
 }
 
+/* Inner border line */
 .app-shell::after {
   content: "";
   position: absolute;
@@ -92,6 +137,7 @@ body {
   pointer-events: none;
 }
 
+/* Little “phone handle” */
 .status-bar {
   width: 64px;
   height: 4px;
@@ -100,7 +146,10 @@ body {
   margin: 0 auto 1.25rem;
 }
 
-/* Centered Header */
+
+/* ==========================================================
+   5) HEADER (KickSense title + subtitle)
+   ========================================================== */
 .app-header {
   text-align: center;
 }
@@ -108,16 +157,18 @@ body {
 .app-header h1 {
   font-size: 2.5rem;
   margin: 0;
+
   font-family: 'Pacifico', 'Segoe Script', cursive;
   font-weight: 400;
   letter-spacing: 0.02em;
+
   color: #fff;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(96, 165, 250, 0.5);
 }
 
 .subtitle {
   margin: 0.75rem 0 1.5rem;
-  color: var(--text-muted);
+  color: var(--muted);
   line-height: 1.55;
   font-size: 0.98rem;
 }
@@ -128,6 +179,10 @@ body {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
+
+/* ==========================================================
+   6) VISUALIZER LAYOUT (title + buttons + content)
+   ========================================================== */
 .visualizer {
   display: flex;
   flex-direction: column;
@@ -141,9 +196,18 @@ body {
   gap: 1rem;
 }
 
+.control-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem; /* spacing between Generator and Sim buttons */
+}
+
+/* Heading font choice */
 h2 {
   font-family: "Englebert", cursive;
 }
+
+/* Visualizer title: animated glow */
 .section-header h2 {
   margin: 0;
   font-size: 1.2rem;
@@ -161,46 +225,247 @@ h2 {
   }
 }
 
-#toggle-sim {
+
+/* ==========================================================
+   7) CONTROL BUTTONS (Start/ Input Manual)
+   - JS toggles .is-active on these
+   ========================================================== */
+#toggle-start {
   background: var(--gradient-button);
   color: #0a0f1b;
+
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 999px;
+
   padding: 0.45rem 1.15rem;
   font-size: 0.9rem;
   font-weight: 600;
+
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
 }
 
-#toggle-sim:hover,
-#toggle-sim:focus {
+#toggle-start:hover,
+#toggle-start:focus {
   background: var(--gradient-button-hover);
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(96, 165, 250, 0.3), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
   outline: none;
 }
 
-#toggle-sim:active {
+#toggle-start:active {
   transform: translateY(1px);
 }
 
-#toggle-sim.is-active {
+#toggle-start.is-active {
   background: var(--gradient-button-hover);
   color: #0a0f1b;
   box-shadow: 0 2px 10px rgba(96, 165, 250, 0.4), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
   transform: translateY(1px);
 }
 
+.secondary-btn{
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  padding: 0.45rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondary-btn:hover{
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.35);
+}
+
+
+/* ==========================================================
+   7.5) GENERIC BUTTON (.btn)
+   - Used by "Connect Arduino" (and can be reused later)
+   ========================================================== */
+.btn{
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.45rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 18px rgba(96, 165, 250, 0.18);
+}
+
+.btn:hover{
+  background: var(--btn-bg-hover);
+  border-color: rgba(147, 197, 253, 0.55);
+  transform: translateY(-1px);
+}
+
+.btn:active{
+  transform: translateY(1px);
+}
+
+.btn:disabled{
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn.is-connected{
+  background: var(--accent);
+  border-color: rgba(34, 197, 94, 0.55);
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.16);
+}
+
+.manual-input.is-hidden{
+  display: none;
+}
+
+/* ==========================================================
+   8) SENSOR READOUT BAR (toeN / insideN / lacesN)
+   - Highlighted max value gets .highlight
+   ========================================================== */
+.sensor-display {
+  display: flex;
+  justify-content: space-around;
+
+  padding: 0.75rem 0.5rem;
+  background-color: rgba(40, 51, 71, 0.7);
+
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow: inset 0 0 10px rgba(96, 165, 250, 0.1);
+
+  font-family: 'Fira Code', 'SFMono-Regular', monospace;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  color: var(--accent-glow);
+  letter-spacing: 0.03em;
+
+  margin-top: 2rem;     /* space below the buttons */
+  margin-bottom: 0.5rem; /* space above the shoe */
+}
+
+.sensor-value {
+  transition: color 0.1s ease;
+}
+
+.sensor-value.highlight {
+  color: var(--text-primary);
+  text-shadow: 0 0 5px var(--accent-glow);
+}
+
+
+/* ==========================================================
+   9) VIEW SELECTOR (1 / 2 / 3 buttons)
+   - Active gets .is-active
+   ========================================================== */
+.view-selector-panel {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.view-selector-btn {
+  width: 3rem;
+  height: 3rem;
+
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-selector-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.view-selector-btn.is-active {
+  background: var(--accent);
+  color: var(--bg-dark); /* dark text on blue */
+  border-color: var(--accent-glow);
+  transform: scale(1.15);
+  box-shadow: 
+  0 0 10px var(--accent-soft), 
+  0 0 20px var(--accent-glow);
+  transform: scale(1.05);
+}
+
+
+/* ==========================================================
+   10) SHOWCASE VIEW SWITCHING (View 1 / 2 / 3 panels)
+   - wrapper holds the stack
+   - inactive views are absolute + transparent
+   - active view becomes relative to take space
+   ========================================================== */
+#showcase-views-wrapper {
+  position: relative;
+  /* note: you rely on views being similar height so the wrapper feels stable */
+}
+
+.showcase-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  opacity: 0;
+
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.showcase-view.is-active {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* ==========================================================
+   11) SHOE DISPLAY AREA (3D model container)
+   - aspect-ratio makes the shoe view consistent
+   ========================================================== */
 .shoe-wrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 300 / 160;
+
   border-radius: 1.25rem;
-  background: linear-gradient(145deg, #283347, #111827);
-  box-shadow: inset 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: transparent;
+
+box-shadow:
+  0 0 0 1px rgba(255, 255, 255, 0.12),
+  0 12px 30px rgba(0, 0, 0, 0.25);
+
   overflow: hidden;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,12 +474,15 @@ h2 {
 .shoe-3d-container {
   width: 100%;
   height: 100%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   position: relative;
 }
 
+/* model-viewer canvas */
 .shoe-3d-container model-viewer {
   width: 100%;
   height: 100%;
@@ -222,14 +490,22 @@ h2 {
   --poster-color: transparent;
 }
 
+
+/* ==========================================================
+   12) LEGEND (Low / Mid / High force indicators)
+   ========================================================== */
 .legend {
   display: flex;
   justify-content: space-between;
+
   padding: 0;
   margin: 0;
+
   list-style: none;
+
   color: var(--text-muted);
   font-size: 0.85rem;
+
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -237,43 +513,53 @@ h2 {
 .color-dot {
   width: 12px;
   height: 12px;
+
   border-radius: 50%;
   display: inline-block;
+
   margin-right: 0.5rem;
   vertical-align: middle;
+
   border: 1px solid rgba(255, 255, 255, 0.8);
   box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
 }
 
-.color-dot.low {
-  background: var(--low-force);
-}
-
-.color-dot.mid {
-  background: var(--mid-force);
-}
+.color-dot.low { background: var(--low-force); }
+.color-dot.mid { background: var(--mid-force); }
 
 .color-dot.high {
   background: var(--high-force);
   box-shadow: 0 0 6px var(--high-force), 0 0 10px var(--high-force);
 }
 
+
+/* ==========================================================
+   13) COLLAPSIBLE SECTIONS (Hvordan / Hvorfor)
+   - JS toggles .active on title + arrow rotation
+   ========================================================== */
 .collapsible-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   background-color: rgba(40, 51, 71, 0.7);
   color: var(--text-primary);
+
   cursor: pointer;
+
   padding: 0.75rem 1.25rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.75rem;
+
   text-align: left;
   outline: none;
+
   font-size: 1.2rem;
   font-weight: 600;
+
   width: 100%;
   margin: 0 0 1rem;
+
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1) inset;
 }
@@ -285,14 +571,18 @@ h2 {
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
 }
 
+/* The arrow icon (rotates when open) */
 .collapsible-title .arrow {
   display: inline-block;
   width: 0.6em;
   height: 0.6em;
+
   border-right: 2px solid #fff;
   border-bottom: 2px solid #fff;
+
   transform: rotate(-45deg);
   transition: transform 0.2s ease;
+
   margin-left: 0.75rem;
   opacity: 0.7;
 }
@@ -301,11 +591,14 @@ h2 {
   transform: rotate(45deg);
 }
 
+/* The collapsible panel itself */
 .collapsible-content {
   color: var(--text-muted);
   line-height: 1.6;
+
   overflow: hidden;
   max-height: 0;
+
   transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   opacity: 0;
   transform: translateY(-4px);
@@ -317,20 +610,30 @@ h2 {
   transform: translateY(0);
 }
 
+/* Small “note” paragraph style */
 .how-it-works p.note {
+  font-family: "Times New Roman", serif;
   font-size: 0.9rem;
-  font-style: italic;
+  font-style: normal;
   color: var(--text-muted);
   opacity: 0.85;
   margin-top: 0.5rem;
 }
 
+
+/* ==========================================================
+   14) CODE BLOCK (Arduino block styling)
+   - .arduino-code-hidden hides it fully
+   ========================================================== */
 .code-block {
   background: rgba(10, 15, 27, 0.9);
+
   border-radius: 1rem;
   border: 1px solid rgba(96, 165, 250, 0.2);
+
   padding: 1rem;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+
   overflow: auto;
 }
 
@@ -346,6 +649,11 @@ h2 {
   display: none !important;
 }
 
+
+/* ==========================================================
+   15) RESPONSIVE (phones)
+   - Only adjusts padding + legend layout
+   ========================================================== */
 @media (max-width: 480px) {
   body {
     padding: 2rem 1rem;
@@ -363,30 +671,799 @@ h2 {
   }
 }
 
-/* Heatmap styles */
+
+/* ==========================================================
+   16) HEATMAP POINT EFFECT
+   ========================================================== */
 .heatmap-point {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10;
-    transform: translate(-50%, -50%);
-    animation: heatmap-fade 1.5s forwards;
-    background-image: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(96, 165, 250, 0.6) 30%,
-        rgba(59, 130, 246, 0.3) 60%,
-        rgba(30, 64, 175, 0) 100%
-    );
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10;
+
+  transform: translate(-50%, -50%);
+  animation: heatmap-fade 1.5s forwards;
+
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(96, 165, 250, 0.6) 30%,
+    rgba(59, 130, 246, 0.3) 60%,
+    rgba(30, 64, 175, 0) 100%
+  );
 }
 
 @keyframes heatmap-fade {
-    from {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-    to {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.5);
-    }
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+/* ==========================================================
+   17) 3D VIEW OVERLAY DOTS (impact circles)
+   ========================================================== */
+.shoe-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.impact-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0;
+  border: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 0 0 10px rgba(255,255,255,0.20);
+  transition: opacity 120ms ease, transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.impact-dot.is-on {
+  opacity: 1;
+}
+
+/* ==========================================================
+   17) 3D VIEW OVERLAY DOTS (impact circles) + RIPPLE WAVES
+   ========================================================== */
+
+.impact-dot{
+  /* keep your existing styles */
+  --v: 0; /* intensity (0..1) from JS */
+  color: rgba(255,255,255,0.9); /* will be overridden by JS with hsl */
+}
+
+/* Two ripple rings using pseudo-elements */
+.impact-dot::before,
+.impact-dot::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0;
+
+  border: 2px solid currentColor;
+  box-shadow: 0 0 14px currentColor;
+  pointer-events: none;
+}
+
+/* Run ripples only when the dot is active */
+.impact-dot.is-on::before{
+  animation: impact-ripple 1.05s ease-out infinite;
+}
+
+.impact-dot.is-on::after{
+  animation: impact-ripple 1.05s ease-out infinite;
+  animation-delay: 0.32s;
+}
+
+/* Ripple animation (bigger + fades out) */
+@keyframes impact-ripple{
+  0%{
+    opacity: calc(0.35 + (var(--v) * 0.55));
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100%{
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(calc(3.0 + (var(--v) * 3.5)));
+  }
+}
+/* Remove the two big arrow bars */
+.collapsible-title {
+  display: none !important;
+}
+
+/* Force the text panels to stay open */
+.collapsible-content {
+  max-height: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  overflow: visible !important;
+}
+/* Hide both info sections completely */
+.how-it-works,
+.why-it-matters {
+  display: none !important;
+}
+
+/* Make Model button full-width like a bar */
+#toggle-model {
+  width: 100%;
+}
+
+/* Make Model button same size behavior as Start/Hide (no full-width stretch) */
+#toggle-model {
+  align-self: flex-start !important;   /* or flex-start if you want left aligned */
+  width: auto !important;
+  display: inline-flex !important;
+
+  padding: 0.45rem 1.15rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+}
+
+
+/* ==========================================================
+   18) IMPACT BARS (under shoe model)
+   - 3 horizontal bars: Toe / Inside / Laces
+   - Filled + color changes with sensor intensity
+   ========================================================== */
+
+.impact-bars{
+  margin-top: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+
+  padding: 0.75rem 0.85rem;
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.impact-bar{
+  display: grid;
+  grid-template-columns: 56px 1fr 42px;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.impact-label{
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.78);
+}
+
+.impact-pct{
+  font-size: 0.78rem;
+  text-align: right;
+  color: rgba(255,255,255,0.72);
+  font-variant-numeric: tabular-nums;
+}
+
+.impact-track{
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.35);
+}
+
+.impact-fill{
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--low-force);
+  box-shadow: 0 0 14px currentColor;
+  transition:
+    width 180ms ease-out,
+    background-color 180ms ease-out,
+    box-shadow 180ms ease-out;
+}
+/* ==========================================================
+   FEEDBACK (5-star rating)
+   ========================================================== */
+
+.feedback{
+  margin-top: 0.75rem;
+}
+
+.feedback-card{
+  padding: 0.9rem 0.95rem;
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  text-align: center;
+}
+
+.feedback-title{
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 0.55rem;
+}
+
+.stars{
+  display: inline-flex;
+  gap: 0.35rem;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.star{
+  background: transparent;
+  border: none;
+  padding: 0.15rem 0.2rem;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+
+  color: rgba(255,255,255,0.25);
+  transition: transform 120ms ease, color 120ms ease, text-shadow 120ms ease;
+}
+
+.star:hover{
+  transform: translateY(-1px) scale(1.03);
+}
+
+.star.is-on{
+  color: #facc15; /* yellow */
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.45);
+}
+
+.feedback-msg{
+  margin-top: 0.55rem;
+  min-height: 1.2em;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.75);
+}
+/* Confetti overlay */
+#confetti-canvas{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* BACKGROUND THEMES */
+.theme-dark  { background: #0f0f0f; color: white; }
+.theme-gray  { background: #2b2b2b; color: white; }
+
+/* Light theme: use proper tokens so text/buttons stay readable */
+.theme-light{
+  background: #ffffff;
+  color: #111;
+
+  --bg: #f5f6f8;
+  --panel: #ffffff;
+  --panel2: #eef1f4;
+
+  --text: #111111;
+  --text-primary: #111111;
+  --text-muted: #4b5563;
+  --muted: rgba(17,17,17,0.70);
+
+  --border: rgba(0,0,0,0.12);
+  --separator: rgba(0,0,0,0.12);
+  --shadow: 0 12px 30px rgba(0,0,0,0.15);
+
+  --btn-bg: rgba(17,17,17,0.06);
+  --btn-bg-hover: rgba(17,17,17,0.12);
+  --btn-text: #111111;
+
+  --gradient-button: linear-gradient(145deg, #1f2937, #111827);
+  --gradient-button-hover: linear-gradient(145deg, #111827, #0b1220);
+
+  --accent: #2563eb;
+  --accent-soft: #3b82f6;
+  --accent-glow: #60a5fa;
+}
+
+/* Light theme component tweaks */
+.theme-light .app-shell{
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.theme-light .app-header h1{
+  color: #111;
+  text-shadow: 0 0 10px rgba(37, 99, 235, 0.20);
+}
+
+.theme-light .secondary-btn{
+  color: #111;
+  border-color: rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.04);
+}
+
+.theme-light .view-selector-btn{
+  color: #374151;
+  border-color: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.03);
+}
+
+.theme-light .impact-bars,
+.theme-light .feedback-card{
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(0,0,0,0.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+.theme-light .impact-track{
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.10);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.15);
+}
+
+.theme-light .impact-label,
+.theme-light .impact-pct,
+.theme-light .feedback-title,
+.theme-light .feedback-msg{
+  color: #111;
+}
+
+.theme-light .star{
+  color: rgba(0,0,0,0.25);
+}
+
+.theme-light .star.is-on{
+  color: #f59e0b;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
+}
+
+.theme-light .conn-btn{
+  color: #111;
+  border-color: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.04);
+}
+
+.theme-light .theme-fab,
+.theme-light .dev-fab{
+  color: #111;
+  background: rgba(0,0,0,0.05);
+  border-color: rgba(0,0,0,0.18);
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+/* Background Change Button Settings */
+.theme-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* ===============================
+   KICKSENSE CONNECTION STATUS
+================================ */
+
+.conn-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  /* Keep the original wide pill look */
+  width: 100%;
+  min-width: 0;
+  align-self: stretch;
+
+  padding: 1rem 0.9rem;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.06);
+
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* Center the status text within the pill */
+.conn-text{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Keep icon visible on the left while text stays centered */
+.conn-icon{
+  position: absolute;
+  left: 0.8rem;
+  z-index: 2;
+  line-height: 1;
+}
+
+/* RED — no connection */
+.conn-off{
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.6);
+  color: #fecaca;
+}
+
+/* Subtle "uploading" / scanning edge glow for no-connection */
+.conn-off{
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(239,68,68,0.25),
+    0 0 10px rgba(239,68,68,0.20);
+}
+
+.conn-off::before{
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  background:
+    radial-gradient(120px 40px at 10% 50%, rgba(255,255,255,0.15), transparent 60%),
+    radial-gradient(120px 40px at 90% 50%, rgba(255,255,255,0.08), transparent 60%);
+  opacity: 0.7;
+  filter: blur(6px);
+  animation: conn-sheen 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Light theme tuning for the "no connection" button */
+.theme-light .conn-off{
+  background: rgba(239,68,68,0.08);
+  color: #7f1d1d;
+  border-color: rgba(239,68,68,0.45);
+  box-shadow:
+    0 0 0 1px rgba(239,68,68,0.20),
+    0 0 10px rgba(239,68,68,0.14);
+}
+
+.theme-light .conn-off::before{
+  background:
+    radial-gradient(120px 40px at 10% 50%, rgba(17,17,17,0.12), transparent 60%),
+    radial-gradient(120px 40px at 90% 50%, rgba(17,17,17,0.07), transparent 60%);
+  opacity: 0.55;
+}
+
+
+@keyframes conn-sheen{
+  0%{
+    transform: translateX(-30%) scale(0.98);
+    opacity: 0.45;
+  }
+  50%{
+    transform: translateX(30%) scale(1.02);
+    opacity: 0.75;
+  }
+  100%{
+    transform: translateX(-30%) scale(0.98);
+    opacity: 0.45;
+  }
+}
+
+/* ORANGE — connecting */
+.conn-connecting{
+  background: rgba(251,191,36,0.15);
+  border-color: rgba(251,191,36,0.6);
+  color: #fde68a;
+}
+
+.conn-idle{
+  background: rgba(59,130,246,0.16);
+  border-color: rgba(96,165,250,0.55);
+  color: #bfdbfe;
+  box-shadow:
+    0 0 0 1px rgba(96,165,250,0.22),
+    0 0 12px rgba(96,165,250,0.16);
+  animation: conn-idle-breathe 2.2s ease-in-out infinite;
+}
+
+@keyframes conn-idle-breathe{
+  0%, 100%{
+    box-shadow:
+      0 0 0 1px rgba(96,165,250,0.20),
+      0 0 10px rgba(96,165,250,0.14);
+  }
+  50%{
+    box-shadow:
+      0 0 0 1px rgba(96,165,250,0.35),
+      0 0 18px rgba(96,165,250,0.26);
+  }
+}
+
+/* GREEN — connected */
+.conn-on{
+  background: rgba(34,197,94,0.18);
+  border-color: rgba(34,197,94,0.6);
+  color: #bbf7d0;
+  box-shadow:
+    0 0 0 1px rgba(34,197,94,0.24),
+    0 0 14px rgba(34,197,94,0.20);
+  animation: conn-on-pulse 2.6s ease-in-out infinite;
+}
+
+/* Slow background shimmer for connected state */
+.conn-on::after{
+  content: "";
+  position: absolute;
+  inset: -30% -45%;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255,255,255,0.22) 50%,
+    transparent 70%
+  );
+  filter: blur(7px);
+  animation: conn-on-sweep 3.4s ease-in-out infinite;
+}
+
+/* Spinner ring */
+.conn-ring{
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  opacity: 0;
+}
+
+/* Spin animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes conn-on-pulse{
+  0%, 100%{
+    box-shadow:
+      0 0 0 1px rgba(34,197,94,0.22),
+      0 0 12px rgba(34,197,94,0.16);
+  }
+  50%{
+    box-shadow:
+      0 0 0 1px rgba(34,197,94,0.38),
+      0 0 22px rgba(34,197,94,0.30);
+  }
+}
+
+@keyframes conn-on-sweep{
+  0%{
+    transform: translateX(-45%) rotate(0.001deg);
+    opacity: 0.18;
+  }
+  50%{
+    transform: translateX(45%) rotate(0.001deg);
+    opacity: 0.42;
+  }
+  100%{
+    transform: translateX(-45%) rotate(0.001deg);
+    opacity: 0.18;
+  }
+}
+
+.conn-connecting .conn-ring{
+  opacity: 0.7;
+  animation: spin 1s linear infinite;
+}
+
+/* Keep connected state clean: no rotating arc artifact */
+.conn-on .conn-ring{
+  opacity: 0;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .conn-on,
+  .conn-on::after{
+    animation: none !important;
+  }
+}
+
+/* ===============================
+   THEME FLOATING BUTTON (FAB)
+   top-left like settings
+================================ */
+
+.theme-fab{
+  position: absolute;
+  top: 1.1rem;
+  left: 1.1rem;
+
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.22);
+
+  color: #fff;
+  font-size: 1.15rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  z-index: 20;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+
+  opacity: 0.75;
+}
+
+.theme-fab:hover{
+  background: rgba(255,255,255,0.16);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow:
+    0 6px 18px rgba(96,165,250,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+  opacity: 1;
+}
+
+.theme-fab:active{
+  transform: translateY(1px) scale(0.95);
+}
+
+/* ===============================
+   DEV FLOATING BUTTON (FAB)
+================================ */
+
+.dev-fab{
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.22);
+
+  color: #fff;
+  font-size: 1.1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  z-index: 20;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+/* Hover */
+.dev-fab:hover{
+  background: rgba(255,255,255,0.16);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow:
+    0 6px 18px rgba(96,165,250,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+/* Click */
+.dev-fab:active{
+  transform: translateY(1px) scale(0.95);
+}
+
+/* Optional: hide a bit unless hovered */
+.dev-fab{
+  opacity: 0.7;
+}
+.dev-fab:hover{
+  opacity: 1;
+}
+
+/* Dev button */
+.dev-panel.is-hidden{
+  display: none;
+}
+
+.dev-panel{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.theme-modal.hidden {
+  display: none;
+}
+
+.theme-box {
+  background: #111;
+  padding: 20px 24px;
+  border-radius: 12px;
+  min-width: 260px;
+  text-align: center;
+}
+
+.theme-box h3 {
+  margin-bottom: 16px;
+}
+
+.theme-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-option {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.close-btn {
+  margin-top: 16px;
+  background: #444;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===============================
+   THEME TOKENS (DEFAULT THEME)
+================================ */
+:root{
+  --bg: #2f2f2f;
+  --panel: #1b2a44;
+  --panel2: #162238;
+
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.75);
+
+  --accent: #4da3ff;         /* main color */
+  --accent2: #2b6cb0;        /* darker accent */
+  --border: rgba(255,255,255,0.14);
+
+  --btn-bg: rgba(255,255,255,0.10);
+  --btn-bg-hover: rgba(255,255,255,0.16);
+  --btn-text: #ffffff;
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
